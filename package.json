@@ -1,0 +1,98 @@
+{
+  "name": "@duaneoli/base-project-nest",
+  "version": "0.1.2",
+  "author": "Duane Oliveira",
+  "description": "Base for starting a project with pattern to using nest js framework",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "keywords": [
+    "react",
+    "typescript",
+    "types",
+    "nestjs",
+    "nest",
+    "pattern"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@duaneoli/logger": "^0.1.0",
+    "@nestjs/cli": "^9.1.2",
+    "@nestjs/common": "^9.0.11",
+    "@nestjs/config": "^2.2.0",
+    "@nestjs/core": "^9.0.11",
+    "@nestjs/jwt": "^9.0.0",
+    "@nestjs/platform-express": "^9.0.11",
+    "@nestjs/schematics": "^9.0.3",
+    "@nestjs/typeorm": "^9.0.1",
+    "@types/express": "^4.17.13",
+    "@types/node": "^18.7.16",
+    "bcrypt": "^5.0.1",
+    "dayjs": "^1.11.7",
+    "ejs": "^3.1.8",
+    "jest": "^29.0.3",
+    "joi": "^17.6.0",
+    "nestjs-joi": "^1.8.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.5.6",
+    "typeorm": "^0.3.9",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.1.2",
+    "@commitlint/config-conventional": "^17.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "commitlint": "^17.1.2",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^8.26.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "typescript": "^4.3.5"
+  },
+  "scripts": {
+    "prepare": "node -e \"try { require('husky').install() } catch (e) {if (e.code !== 'MODULE_NOT_FOUND') throw e}\"",
+    "build": "rm -rf dist/ && tsc",
+    "lint": "eslint \"{**/*,*}.{js,ts,jsx,tsx}\"",
+    "commit": "npx git-cz",
+    "prettier": "prettier --write \"{src,tests,example/src}/**/*.{js,ts,jsx,tsx}\""
+  },
+  "lint-staged": {
+    "*.{js, jsx}": [
+      "prettier --write"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "echo '>> Pre-commit checks' && lint-staged && yarn prettier"
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duaneoli/types-env.git"
+  },
+  "bugs": {
+    "url": "https://github.com/duaneoli/types-env/issues"
+  },
+  "homepage": "https://github.com/duaneoli/types-env#readme"
+}
