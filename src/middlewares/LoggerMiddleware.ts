@@ -13,12 +13,12 @@ export class LoggerMiddleware implements NestMiddleware {
   use(request: any, response: Response, next: NextFunction) {
     if (!request.baseUrl.includes('health-check')) {
       const startTime = new Date()
-      let { baseUrl, agent, httpVersion, originalUrl, origin }: ProcessedHeaderDTO = request.processedHeaderDTO
+      let { baseUrl, agent, httpVersion, originalUrl, origin, requestId, ip, platform }: ProcessedHeaderDTO = request.processedHeaderDTO
 
       let contentLength = request.get('content-length') ? request.get('content-length').concat('b') : 'content-length'
       origin = origin ? origin : 'origin'
 
-      Logger.startRoute(`${request.method} ${originalUrl} HTTP/${httpVersion} ${contentLength} ${origin} ${agent}`)
+      Logger.startRoute(`${request.method} ${originalUrl} HTTP/${httpVersion} ${contentLength} ${origin} ${agent} ${ip} ${platform} ${requestId}`)
 
       response.on('close', () => {
         const { statusCode } = response
@@ -40,7 +40,7 @@ export class LoggerMiddleware implements NestMiddleware {
         const identity = userId ? userId : 'anonymous'
         const token = userId ? (expirationTime > 0 ? String(expirationTime).concat('m') : 'expired') : 'infinity'
 
-        Logger.finishRoute(`${request.method} ${baseUrl} ${statusCode} ${contentLength} ${deltaTime} ${origin} ${identity} ${token}`)
+        Logger.finishRoute(`${request.method} ${baseUrl} ${statusCode} ${contentLength} ${deltaTime} ${origin} ${identity} ${token} ${requestId}`)
       })
 
       if (request.error) throw new HttpException(request.error, HttpStatus.UNAUTHORIZED)

@@ -513,10 +513,10 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@duaneoli/logger@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@duaneoli/logger/-/logger-0.1.0.tgz#538f8856764c9873489c069d804e878bce6820f7"
-  integrity sha512-pPaYZlmViWj5ZvjvnSZOb2678GMG/feyMQlBgewVPbjAs92lADYDJkmDyHoIl7Lnf/F9iNvkeyDU0358eTI+qg==
+"@duaneoli/logger@^0.2.3":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@duaneoli/logger/-/logger-0.2.2.tgz#f7806bc6595a5b3dc36b36647a49e0f698ae7ede"
+  integrity sha512-HYqbeNsB3sFJ900P6Gf2T609JW53UtgC7ld7+X/PVWCbna0S2AkkXTbh3bwegRyPzURcV95UJR4ZlmPBB3W15w==
 
 "@eslint-community/eslint-utils@^4.2.0":
   version "4.4.0"

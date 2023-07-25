@@ -1,6 +1,6 @@
 {
   "name": "@duaneoli/base-project-nest",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "Duane Oliveira",
   "description": "Base for starting a project with pattern to using nest js framework",
   "main": "dist/index.js",
@@ -15,7 +15,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@duaneoli/logger": "^0.1.0",
+    "@duaneoli/logger": "^0.2.3",
     "@nestjs/cli": "^9.1.2",
     "@nestjs/common": "^9.0.11",
     "@nestjs/config": "^2.2.0",
@@ -89,10 +89,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/duaneoli/types-env.git"
+    "url": "git+https://github.com/duaneoli/base-project-nest.git"
   },
   "bugs": {
-    "url": "https://github.com/duaneoli/types-env/issues"
+    "url": "https://github.com/duaneoli/base-project-nest/issues"
   },
-  "homepage": "https://github.com/duaneoli/types-env#readme"
+  "homepage": "https://github.com/duaneoli/base-project-nest#readme"
 }
