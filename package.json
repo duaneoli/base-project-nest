@@ -15,7 +15,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@duaneoli/logger": "^0.2.3",
+    "@duaneoli/logger": "^0.2.2",
     "@nestjs/cli": "^9.1.2",
     "@nestjs/common": "^9.0.11",
     "@nestjs/config": "^2.2.0",
