@@ -18,7 +18,11 @@ export class LoggerMiddleware implements NestMiddleware {
       let contentLength = request.get('content-length') ? request.get('content-length').concat('b') : 'content-length'
       origin = origin ? origin : 'origin'
 
-      Logger.startRoute(`${request.method} ${originalUrl} HTTP/${httpVersion} ${contentLength} ${origin} ${agent} ${ip} ${platform} ${requestId}`)
+      Logger.startRoute(
+        `${request.method} ${originalUrl} HTTP/${httpVersion} ${contentLength} ${origin} ${agent} ${ip || 'ip'} ${platform || 'platform'} ${
+          requestId || 'requestId'
+        }`,
+      )
 
       response.on('close', () => {
         const { statusCode } = response
@@ -40,7 +44,9 @@ export class LoggerMiddleware implements NestMiddleware {
         const identity = userId ? userId : 'anonymous'
         const token = userId ? (expirationTime > 0 ? String(expirationTime).concat('m') : 'expired') : 'infinity'
 
-        Logger.finishRoute(`${request.method} ${baseUrl} ${statusCode} ${contentLength} ${deltaTime} ${origin} ${identity} ${token} ${requestId}`)
+        Logger.finishRoute(
+          `${request.method} ${baseUrl} ${statusCode} ${contentLength} ${deltaTime} ${origin} ${identity} ${token} ${requestId || 'requestId'}`,
+        )
       })
 
       if (request.error) throw new HttpException(request.error, HttpStatus.UNAUTHORIZED)
