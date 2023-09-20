@@ -9,15 +9,23 @@ export class TypeOrmExceptionFilter {
   constructor() {}
 
   static verifyIsError(exception: HttpException): boolean {
-    return exception.getResponse() instanceof QueryFailedError
+    return exception.cause instanceof QueryFailedError
   }
   static buildError(exception: HttpException): ExceptionDTO {
-    const queryFailedErrorDTO = new QueryFailedErrorDTO(exception.getResponse() as QueryFailedError)
-
-    if (queryFailedErrorDTO.driverError.code === PostgreSqlErrorCode.UNIQUE_VIOLATION)
-      Logger.warn(queryFailedErrorDTO.message, JSON.stringify({ query: queryFailedErrorDTO.query, params: queryFailedErrorDTO.parameters }))
-    else Logger.error(queryFailedErrorDTO.message, JSON.stringify({ query: queryFailedErrorDTO.query, params: queryFailedErrorDTO.parameters }))
-
-    return ExceptionDTO.error(queryFailedErrorDTO.message, queryFailedErrorDTO.driverError.detail)
+    const queryFailedErrorDTO = new QueryFailedErrorDTO(exception.cause as QueryFailedError)
+    let error = queryFailedErrorDTO.message
+    let message = queryFailedErrorDTO.driverError.detail
+    switch (queryFailedErrorDTO.driverError.code) {
+      case PostgreSqlErrorCode.UNIQUE_VIOLATION:
+        Logger.warn(queryFailedErrorDTO.message, JSON.stringify({ query: queryFailedErrorDTO.query, params: queryFailedErrorDTO.parameters }))
+        break
+      case PostgreSqlErrorCode.GROUPING_ERROR:
+        Logger.warn(queryFailedErrorDTO.message, JSON.stringify({ query: queryFailedErrorDTO.query, params: queryFailedErrorDTO.parameters }))
+        error = 'Grouping error'
+        message = 'Some columns must appear in te group by clause'
+      default:
+        Logger.error(queryFailedErrorDTO.message, JSON.stringify({ query: queryFailedErrorDTO.query, params: queryFailedErrorDTO.parameters }))
+    }
+    return ExceptionDTO.warn(error, message)
   }
 }
