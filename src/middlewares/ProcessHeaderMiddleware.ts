@@ -23,10 +23,11 @@ export class ProcessHeaderMiddleware implements NestMiddleware {
           if (bearer == 'Bearer') {
             const bearerTokenProcessor = new BearerTokenProcessor(this.jwtService, token)
             if (!bearerTokenProcessor.isBearerToken()) throw Error('JWT decode error')
-            if (!bearerTokenProcessor.isSignatureValid()) throw Error('Signature is not valid')
-            request.processedPayloadDTO = ProcessedPayloadDTO.newInstaceBasedOnRequest(bearerTokenProcessor.payload)
-            request.processedHeaderDTO.userId = bearerTokenProcessor.payload?.id
-            request.processedHeaderDTO.expirationTime = bearerTokenProcessor.expirationTime
+            if (bearerTokenProcessor.isSignatureValid()) {
+              request.processedPayloadDTO = ProcessedPayloadDTO.newInstaceBasedOnRequest(bearerTokenProcessor.payload)
+              request.processedHeaderDTO.userId = bearerTokenProcessor.payload?.id
+              request.processedHeaderDTO.expirationTime = bearerTokenProcessor.expirationTime
+            }
           }
         }
       } catch (error: any) {
