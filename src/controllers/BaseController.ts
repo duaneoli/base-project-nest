@@ -1,8 +1,9 @@
-import { Controller, Get, Res } from '@nestjs/common'
+import { Controller, Get, HttpCode, Res } from '@nestjs/common'
 import { Response } from 'express'
 @Controller()
 export class BaseController {
   @Get('health-check')
+  @HttpCode(304)
   healthCheck(@Res() req: Response) {
     if (req) {
       req.sendDate = false
