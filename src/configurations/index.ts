@@ -1,1 +1,1 @@
-export * from './DatabaseConfiguration'
+export * from './LoggerConfiguration'

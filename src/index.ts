@@ -1,5 +1,6 @@
 export * from './configurations'
 export * from './controllers'
+export * from './decorators'
 export * from './dtos'
 export * from './filters'
 export * from './helpers'
