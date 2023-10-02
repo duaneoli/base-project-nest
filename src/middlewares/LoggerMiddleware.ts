@@ -1,15 +1,13 @@
-import { HttpException, HttpStatus, Injectable, NestMiddleware, UseFilters } from '@nestjs/common'
+import { HttpException, HttpStatus, Injectable, NestMiddleware } from '@nestjs/common'
 import { randomUUID } from 'crypto'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import { NextFunction, Response } from 'express'
 import { Logger } from '../configurations/LoggerConfiguration'
 import { ProcessedHeaderDTO } from '../dtos/ProcessedHeaderDTO'
-import { CustomExceptionFilter } from '../filters/CustomExceptionFilter'
 dayjs.extend(duration)
 
 @Injectable()
-@UseFilters(new CustomExceptionFilter())
 export class LoggerMiddleware implements NestMiddleware {
   use(request: any, response: Response, next: NextFunction) {
     if (!request.baseUrl.includes('health-check')) {
@@ -21,7 +19,7 @@ export class LoggerMiddleware implements NestMiddleware {
       ip = ip ? ip : 'ip'
       platform = platform ? platform : 'platform'
       requestId = requestId ? requestId : randomUUID()
-      
+
       Logger.startRoute(`${request.method} ${originalUrl} HTTP/${httpVersion} ${contentLength} ${origin} ${agent} ${ip} ${platform} ${requestId}`)
 
       response.on('close', () => {

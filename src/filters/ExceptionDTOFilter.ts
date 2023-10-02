@@ -8,7 +8,7 @@ export class ExceptionDTOFilter {
 
   static buildError(exception: ExceptionDTO): ExceptionDTO {
     const { message, error } = exception
-    Logger.infer(message, error)
+    Logger.infer(message, exception)
 
     return exception
   }
