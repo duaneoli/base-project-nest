@@ -13,7 +13,7 @@ export class JoiExceptionFilter {
 
   static buildError(exception: HttpException): ExceptionDTO {
     const castExceptionDTO = exception.getResponse() as ExceptionDTO
-    const exceptionDTO = ExceptionDTO.warn(castExceptionDTO.error, exception.message)
+    const exceptionDTO = ExceptionDTO.warn(castExceptionDTO.errorCode, exception.message)
     Logger.infer('Request rejected by Joi', exceptionDTO)
 
     return exceptionDTO

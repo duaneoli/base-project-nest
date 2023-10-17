@@ -25,6 +25,6 @@ export class CustomExceptionFilter implements ExceptionFilter {
       process.exit(1)
     }
     const statusCode = exceptionDTO.statusCode || httpException.getStatus()
-    response.status(statusCode).json(new ErrorDTO(statusCode, exceptionDTO))
+    response.status(statusCode).json(new ErrorDTO(statusCode, httpException.message, exceptionDTO))
   }
 }
