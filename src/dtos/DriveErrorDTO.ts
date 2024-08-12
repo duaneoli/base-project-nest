@@ -16,6 +16,8 @@ export class DriverErrorDTO {
   file: string
   line: string
   routine: string
+  name:string
+  message: string
   constructor(driverError: any) {
     this.length = driverError.length
     this.severity = driverError.severity
