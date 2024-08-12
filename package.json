@@ -1,6 +1,6 @@
 {
   "name": "@duaneoli/base-project-nest",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "author": "Duane Oliveira",
   "description": "Base for starting a project with pattern to using nest js framework",
   "main": "dist/index.js",
