@@ -1,28 +1,36 @@
-import { HttpStatus } from '@nestjs/common'
-
 type ExceptionType = 'ERROR' | 'WARN'
 
-export class ExceptionDTO extends Error {
-  public errorCode: string
-  public rejectedInputs?: Array<any>
-  public type: ExceptionType
-  public details: string
-  public statusCode?: HttpStatus
+export class ExceptionErrorDTO {
+  error?: string
+  errorCode?: string
+  message: string
+  rejectedInputs?: Array<any>
+  type?: ExceptionType
 
-  private constructor(type: ExceptionType, errorCode: string, message: string, rejectedInputs?: Array<any>, statusCode?: HttpStatus) {
-    super(message)
+  constructor(error: Partial<ExceptionErrorDTO> & { message: string }) {
+    this.error = error.error
+    this.errorCode = error.errorCode
+    this.message = error.message
+    this.rejectedInputs = error.rejectedInputs
+    this.type = error.type
+  }
+}
+
+export class ExceptionDTO<T extends Record<string, string> = Record<string, string>> {
+  errorCode: T
+  constructor(errorCode: T) {
     this.errorCode = errorCode
-    this.type = type
-    this.details = message
-    if (rejectedInputs) this.rejectedInputs = rejectedInputs
-    if (statusCode) this.statusCode = statusCode
   }
 
-  static error(errorCode: string, message: string, rejectedInputs?: Array<any>, statusCode?: HttpStatus) {
-    return new ExceptionDTO('ERROR', errorCode, message, rejectedInputs, statusCode)
+  static warn(error: string, message: string, rejectedInputs?: Array<any>): ExceptionErrorDTO {
+    return new ExceptionErrorDTO({ error, message, rejectedInputs, type: 'WARN' })
   }
 
-  static warn(errorCode: string, message: string, rejectedInputs?: Array<any>, statusCode?: HttpStatus) {
-    return new ExceptionDTO('WARN', errorCode, message, rejectedInputs, statusCode)
+  static error(error: string, message: string, rejectedInputs?: Array<any>): ExceptionErrorDTO {
+    return new ExceptionErrorDTO({ error, message, rejectedInputs, type: 'ERROR' })
+  }
+
+  make(errorCode: keyof T = '', type: ExceptionType = 'WARN', rejectedInputs?: Array<any>) {
+    return new ExceptionErrorDTO({ errorCode: errorCode as string, message: this.errorCode[errorCode], type, rejectedInputs })
   }
 }

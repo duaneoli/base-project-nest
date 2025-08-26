@@ -1,6 +1,6 @@
+import { Logger } from '@duaneoli/logger'
 import { HttpException } from '@nestjs/common'
-import { Logger } from '../configurations/LoggerConfiguration'
-import { ExceptionDTO } from '../dtos/ExceptionDTO'
+import { ExceptionErrorDTO } from '../dtos/ExceptionDTO'
 
 export class JoiExceptionFilter {
   static verifyIsError(exception: HttpException): boolean {
@@ -11,10 +11,10 @@ export class JoiExceptionFilter {
     )
   }
 
-  static buildError(exception: HttpException): ExceptionDTO {
-    const castExceptionDTO = exception.getResponse() as ExceptionDTO
-    const exceptionDTO = ExceptionDTO.warn(castExceptionDTO.errorCode, exception.message)
-    Logger.infer('Request rejected by Joi', exceptionDTO)
+  static buildError(exception: HttpException): ExceptionErrorDTO {
+    const castExceptionDTO = exception.getResponse() as ExceptionErrorDTO
+    const exceptionDTO = new ExceptionErrorDTO({ error: exception.name, errorCode: 'JOI_ERROR', message: castExceptionDTO.message, type: 'WARN' })
+    Logger.warn(exceptionDTO.errorCode as string, exceptionDTO.message)
 
     return exceptionDTO
   }

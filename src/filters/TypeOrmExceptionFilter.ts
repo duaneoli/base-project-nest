@@ -1,7 +1,7 @@
+import { Logger } from '@duaneoli/logger'
 import { HttpException } from '@nestjs/common'
 import { QueryFailedError } from 'typeorm'
-import { Logger } from '../configurations/LoggerConfiguration'
-import { ExceptionDTO } from '../dtos/ExceptionDTO'
+import { ExceptionDTO, ExceptionErrorDTO } from '../dtos/ExceptionDTO'
 import { QueryFailedErrorDTO } from '../dtos/QueryFailedErrorDTO'
 import { PostgreSqlErrorCode } from '../helpers/PostgreSqlErrorCode'
 
@@ -9,9 +9,9 @@ export class TypeOrmExceptionFilter {
   constructor() {}
 
   static verifyIsError(exception: HttpException): boolean {
-    return exception.cause instanceof QueryFailedError
+    return exception.cause?.name == 'QueryFailedError'
   }
-  static buildError(exception: HttpException): ExceptionDTO {
+  static buildError(exception: HttpException): ExceptionErrorDTO {
     const queryFailedErrorDTO = new QueryFailedErrorDTO(exception.cause as QueryFailedError)
     let error = queryFailedErrorDTO.message
     let message = queryFailedErrorDTO.driverError.detail
@@ -26,6 +26,6 @@ export class TypeOrmExceptionFilter {
       default:
         Logger.error(queryFailedErrorDTO.message, JSON.stringify({ query: queryFailedErrorDTO.query, params: queryFailedErrorDTO.parameters }))
     }
-    return ExceptionDTO.warn(error, message)
+    return ExceptionDTO.warn(message, 'Query failed error', [])
   }
 }

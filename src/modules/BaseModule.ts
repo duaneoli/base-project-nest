@@ -1,6 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { APP_FILTER } from '@nestjs/core'
-import { CustomExceptionFilter } from '../filters/CustomExceptionFilter'
+import { CustomExceptionFilter } from '../filters'
 import { LoggerMiddleware } from '../middlewares/LoggerMiddleware'
 import { ProcessHeaderMiddleware } from '../middlewares/ProcessHeaderMiddleware'
 import { BaseController } from './../controllers/BaseController'

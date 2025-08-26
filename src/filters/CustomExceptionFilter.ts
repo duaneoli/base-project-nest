@@ -1,8 +1,8 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from '@nestjs/common'
+import { Logger } from '@duaneoli/logger'
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common'
 import { Response } from 'express'
-import { Logger } from '../configurations/LoggerConfiguration'
 import { ErrorDTO } from '../dtos/ErrorDTO'
-import { ExceptionDTO } from '../dtos/ExceptionDTO'
+import { ExceptionDTO, ExceptionErrorDTO } from '../dtos/ExceptionDTO'
 import { ExceptionDTOFilter } from './ExceptionDTOFilter'
 import { JoiExceptionFilter } from './JoiExceptionFilter'
 import { TypeOrmExceptionFilter } from './TypeOrmExceptionFilter'
@@ -11,20 +11,18 @@ import { TypeOrmExceptionFilter } from './TypeOrmExceptionFilter'
 export class CustomExceptionFilter implements ExceptionFilter {
   catch(httpException: HttpException, host: ArgumentsHost) {
     const response = host.switchToHttp().getResponse<Response>()
-
-    let exceptionDTO: ExceptionDTO
-    const cause = httpException.cause as ExceptionDTO
-
-    if (ExceptionDTOFilter.verifyIsError(cause)) exceptionDTO = ExceptionDTOFilter.buildError(cause)
+    let exceptionDTO: ExceptionErrorDTO = httpException.getResponse() as ExceptionErrorDTO
+    let statusCode = httpException.getStatus()
+    if (!exceptionDTO.error) exceptionDTO.error = httpException.name
+    if (ExceptionDTOFilter.verifyIsError(exceptionDTO)) exceptionDTO = ExceptionDTOFilter.buildError(exceptionDTO)
     else if (JoiExceptionFilter.verifyIsError(httpException)) exceptionDTO = JoiExceptionFilter.buildError(httpException)
     else if (TypeOrmExceptionFilter.verifyIsError(httpException)) exceptionDTO = TypeOrmExceptionFilter.buildError(httpException)
-    else exceptionDTO = ExceptionDTO.error(httpException.message, JSON.stringify(httpException.cause))
-
-    if (!httpException) {
-      Logger.error('HttpException nothing filter and transform to ExceptionDTO')
-      process.exit(1)
+    else {
+      exceptionDTO = ExceptionDTO.error(httpException.message, JSON.stringify(httpException.cause), [])
+      statusCode = HttpStatus.INTERNAL_SERVER_ERROR
+      Logger.error('Unhandled error', exceptionDTO)
     }
-    const statusCode = exceptionDTO.statusCode || httpException.getStatus()
-    response.status(statusCode).json(new ErrorDTO(statusCode, httpException.message, exceptionDTO))
+
+    response.status(statusCode).json(new ErrorDTO(exceptionDTO))
   }
 }

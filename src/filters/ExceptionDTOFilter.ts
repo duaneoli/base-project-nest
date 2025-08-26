@@ -1,15 +1,16 @@
-import { Logger } from '../configurations/LoggerConfiguration'
-import { ExceptionDTO } from '../dtos/ExceptionDTO'
+import { Logger } from '@duaneoli/logger'
+import { ExceptionErrorDTO } from '../dtos/ExceptionDTO'
 
 export class ExceptionDTOFilter {
-  static verifyIsError(exception: ExceptionDTO): boolean {
-    return exception instanceof ExceptionDTO
+  static verifyIsError(exception: ExceptionErrorDTO): boolean {
+    return exception instanceof ExceptionErrorDTO
   }
 
-  static buildError(exception: ExceptionDTO): ExceptionDTO {
-    const { message } = exception
-    Logger.infer(message, exception)
-
+  static buildError(exception: ExceptionErrorDTO): ExceptionErrorDTO {
+    const message = exception.errorCode ? `${exception.errorCode} - ${exception.message}` : exception.message
+    const error = exception.error || 'Unknown error'
+    if (exception.type == 'WARN') Logger.warn(error, message)
+    else Logger.error(error, message)
     return exception
   }
 }
