@@ -1,10 +1,11 @@
+import { Logger } from '@duaneoli/logger'
 import { HttpException, HttpStatus, Injectable, NestMiddleware } from '@nestjs/common'
 import { randomUUID } from 'crypto'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import { NextFunction, Response } from 'express'
-import { Logger } from '../configurations/LoggerConfiguration'
 import { ProcessedHeaderDTO } from '../dtos/ProcessedHeaderDTO'
+import { removeKeys } from '../helpers/RemoveKeysForObjet'
 dayjs.extend(duration)
 
 @Injectable()
@@ -27,7 +28,8 @@ export class LoggerMiddleware implements NestMiddleware {
         let { userId, expirationTime } = request.processedHeaderDTO
         contentLength = response.get('content-length') ? response.get('content-length')?.concat('b') : 'content-length'
 
-        if (statusCode === 400 && Object.keys(request.body).length > 0) Logger.debug(`Body of request: ${JSON.stringify(request.body)}`)
+        if (statusCode === 400 && Object.keys(request.body).length > 0)
+          Logger.debug(`Body of request: ${JSON.stringify(removeKeys(request.body, ['password', 'pass']))}`)
 
         if (expirationTime) {
           const momentExpirationTime = dayjs.unix(expirationTime)

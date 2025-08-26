@@ -14,6 +14,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
     let exceptionDTO: ExceptionErrorDTO = httpException.getResponse() as ExceptionErrorDTO
     let statusCode = httpException.getStatus()
     if (!exceptionDTO.error) exceptionDTO.error = httpException.name
+
     if (ExceptionDTOFilter.verifyIsError(exceptionDTO)) exceptionDTO = ExceptionDTOFilter.buildError(exceptionDTO)
     else if (JoiExceptionFilter.verifyIsError(httpException)) exceptionDTO = JoiExceptionFilter.buildError(httpException)
     else if (TypeOrmExceptionFilter.verifyIsError(httpException)) exceptionDTO = TypeOrmExceptionFilter.buildError(httpException)
