@@ -1,6 +1,7 @@
 export * from './DriveErrorDTO'
 export * from './ErrorDTO'
 export * from './ExceptionDTO'
+export * from './NewExceptionDTO'
 export * from './PagedDataDTO'
 export * from './ProcessedHeaderDTO'
 export * from './ProcessedPayloadDTO'

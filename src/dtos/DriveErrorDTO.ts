@@ -16,7 +16,7 @@ export class DriverErrorDTO {
   file: string
   line: string
   routine: string
-  name:string
+  name: string
   message: string
   constructor(driverError: any) {
     this.length = driverError.length
@@ -36,5 +36,7 @@ export class DriverErrorDTO {
     this.file = driverError.file
     this.line = driverError.line
     this.routine = driverError.routine
+    this.name = driverError.name
+    this.message = driverError.message
   }
 }
